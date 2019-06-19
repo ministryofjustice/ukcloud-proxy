@@ -1,0 +1,79 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: community-api-proxy
+  labels:
+    app: community-api-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: community-api-proxy-app
+  template:
+    metadata:
+      labels:
+        app: community-api-proxy-app
+    spec:
+      containers:
+        - name: community-api-proxy
+          image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/probation-services/ukcloud-proxy:latest
+          securityContext:
+            privileged: true
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: ssh-key
+              mountPath: /id_rsa
+              readOnly: true
+          env:
+            - name: VPN_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: ukcloud-vpn-secret
+                  key: password
+            - name: VPN_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: ukcloud-vpn-secret
+                  key: host
+            - name: VPN_GROUP
+              valueFrom:
+                secretKeyRef:
+                  name: ukcloud-vpn-secret
+                  key: group
+            - name: VPN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ukcloud-vpn-secret
+                  key: user
+            - name: LOCAL_PORT
+              value: '8080'
+            - name: FORWARD_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: community-api-config
+                  key: forward-host
+            - name: FORWARD_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: community-api-config
+                  key: forward-port
+            - name: SSH_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: ukcloud-ssh-config
+                  key: ssh-port
+            - name: SSH_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ukcloud-ssh-secret
+                  key: ssh-user
+            - name: SSH_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: community-api-secret
+                  key: ssh-host
+      volumes:
+        - name: ssh-key
+          secret:
+            secretName: ssh-tunnel-key
