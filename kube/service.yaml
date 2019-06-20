@@ -1,13 +1,13 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: court-list-service
+  name: community-api-proxy
 spec:
   selector:
-    app: court-list-service-app
+    app: community-api-proxy-app
   ports:
   - protocol: TCP
-    port: 8000
-    targetPort: 8000
+    port: 8080
+    targetPort: 8080
   type: NodePort
 

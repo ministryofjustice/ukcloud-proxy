@@ -17,13 +17,11 @@ spec:
       containers:
         - name: community-api-proxy
           image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/probation-services/ukcloud-proxy:latest
-          securityContext:
-            privileged: true
           ports:
             - containerPort: 8080
           volumeMounts:
             - name: ssh-key
-              mountPath: /id_rsa
+              mountPath: /keys
               readOnly: true
           env:
             - name: VPN_PASS
@@ -70,7 +68,7 @@ spec:
                   key: ssh-user
             - name: SSH_HOST
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: community-api-secret
                   key: ssh-host
       volumes:

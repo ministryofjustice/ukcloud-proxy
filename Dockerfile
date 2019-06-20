@@ -1,8 +1,5 @@
 FROM alpine:latest
-LABEL maintainer="Andy Marke"
-
-# Set language to avoid bugs that sometimes appear
-ENV LANG en_US.UTF-8
+LABEL maintainer="andy.marke@digital.justice.gov.uk"
 
 # Set up requirements
 RUN apk add --no-cache \
@@ -37,12 +34,20 @@ RUN apk add --no-cache --virtual .openconnect-build-deps \
     && rm -fr /tmp/openconnect \
     && apk del .openconnect-build-deps
     
-
+RUN apk add libevent && \
+    apk add --no-cache --virtual=build-dependencies make gcc g++ zlib-dev autoconf automake libevent-dev bsd-compat-headers linux-headers git bash && \
+    cd tmp && \
+    git clone https://github.com/cernekee/ocproxy.git && \
+    cd ocproxy && \
+    ./autogen.sh && ./configure && make && make install && \
+    apk del --purge build-dependencies && rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
 
 COPY run.sh /run.sh
 RUN chmod 777 /run.sh
 
-COPY connect.sh /connect.sh
-RUN chmod 777 /connect.sh
+RUN addgroup -g 2000 -S appgroup
+RUN adduser -D --uid 2000 --system appuser -g 2000
+
+USER 2000
 
 CMD ["/run.sh"]
