@@ -53,10 +53,14 @@ jobs:
       - deploy:
           name: Deploy to dev
           command: |
-            kubectl set image -f ./kube/deployment.yaml community-api-proxy=${ECR_ENDPOINT}/probation-services/ukcloud-proxy:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f ./kube/community-api-proxy-deployment.yaml community-api-proxy=${ECR_ENDPOINT}/probation-services/ukcloud-proxy:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
-              -f ./kube/service.yaml
+              -f ./kube/community-api-proxy-service.yaml |
+            kubectl set image -f ./kube/elastic-search-proxy-deployment.yaml elastic-search-proxy=${ECR_ENDPOINT}/probation-services/ukcloud-proxy:${CIRCLE_SHA1} --local -o yaml \
+            | kubectl apply -f -
+            kubectl apply \
+              -f ./kube/elastic-search-proxy-service.yaml
 
 
 

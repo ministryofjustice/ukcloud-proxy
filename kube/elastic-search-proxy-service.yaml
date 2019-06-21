@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: elastic-search-proxy
+spec:
+  selector:
+    app: elastic-search-proxy-app
+  ports:
+  - protocol: TCP
+    port: 9200
+    targetPort: 9200
+  type: NodePort
+
