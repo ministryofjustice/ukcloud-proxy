@@ -50,4 +50,7 @@ RUN adduser -D --uid 2000 --system appuser -g 2000
 
 USER 2000
 
+RUN mkdir -p ~/.ssh && \
+    echo "ServerAliveInterval 180" >> ~/.ssh/config
+
 CMD ["/run.sh"]
