@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: alfresco-proxy
+spec:
+  selector:
+    app: alfresco-proxy-app
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 8081
+  type: NodePort
+
