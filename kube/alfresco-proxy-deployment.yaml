@@ -18,7 +18,7 @@ spec:
         - name: alfresco-proxy
           image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/probation-services/ukcloud-proxy:latest
           ports:
-            - containerPort: 8081
+            - containerPort: 8080
           volumeMounts:
             - name: ssh-key
               mountPath: /keys
@@ -45,7 +45,7 @@ spec:
                   name: ukcloud-vpn-secret
                   key: user
             - name: LOCAL_PORT
-              value: '8081'
+              value: '8080'
             - name: FORWARD_HOST
               valueFrom:
                 configMapKeyRef:
