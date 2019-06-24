@@ -59,9 +59,9 @@ jobs:
             kubectl set image -f ./kube/elastic-search-proxy-deployment.yaml elastic-search-proxy=${ECR_ENDPOINT}/probation-services/ukcloud-proxy:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply -f ./kube/elastic-search-proxy-service.yaml
-            kubectl set image -f ./kube/alfresco-proxy-deployment.yaml alfresco-proxy=${ECR_ENDPOINT}/probation-services/ukcloud-proxy:${CIRCLE_SHA1} --local -o yaml \
-            | kubectl apply -f -
-            kubectl apply -f ./kube/alfresco-proxy-service.yaml
+#            kubectl set image -f ./kube/alfresco-proxy-deployment.yaml alfresco-proxy=${ECR_ENDPOINT}/probation-services/ukcloud-proxy:${CIRCLE_SHA1} --local -o yaml \
+#            | kubectl apply -f -
+#            kubectl apply -f ./kube/alfresco-proxy-service.yaml
 
 
 
